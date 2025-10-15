@@ -9,7 +9,7 @@ import marker from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 L.Icon.Default.mergeOptions({ iconRetinaUrl: marker2x, iconUrl: marker, shadowUrl: markerShadow });
 
-const DEFAULT_CENTER = [39.8283, -98.5795]; // USA-ish center
+const DEFAULT_CENTER = [39.8283, -98.5795]; // USA
 
 function ClickToAdd({ onAdd }) {
   useMapEvents({
