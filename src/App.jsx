@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import "./App.css"; 
 import L from "leaflet";
 
-// Fix default marker icons for bundlers (Vite/CRA)
+// Markers that came from leaflet 
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
 import marker from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 L.Icon.Default.mergeOptions({ iconRetinaUrl: marker2x, iconUrl: marker, shadowUrl: markerShadow });
 
-const DEFAULT_CENTER = [39.8283, -98.5795]; // USA
+const DEFAULT_CENTER = [39.8283, -98.5795];
 
 function ClickToAdd({ onAdd }) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
       const title = window.prompt("Title for this location (e.g., 'Home' or 'Trip to Paris'):", "");
-      if (title === null) return; // cancel if no title is entered 
-      const notes = window.prompt("Add details (years lived, fav spot, etc.):", "") ?? ""; //
+      if (title === null) return;
+      const notes = window.prompt("Add details (years lived, fav spot, etc.):", "") ?? "";
       onAdd({ lat, lng, title: title.trim() || "Untitled", notes: notes.trim() });
     },
   });
@@ -25,14 +26,13 @@ function ClickToAdd({ onAdd }) {
 }
 
 export default function App() {
-  const [places, setPlaces] = useState([]); // {id, lat, lng, title, notes}
-  const [mode, setMode] = useState("collect"); 
+  const [places, setPlaces] = useState([]);
+  const [mode, setMode] = useState("collect");
 
-// handles adding a location 
   const handleAdd = ({ lat, lng, title, notes }) => {
     setPlaces((prev) => [...prev, { id: crypto.randomUUID(), lat, lng, title, notes }]);
   };
-// Reset button 
+
   const handleReset = () => {
     if (!confirm("Clear everything and start over?")) return;
     setPlaces([]);
@@ -40,9 +40,9 @@ export default function App() {
   };
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <header style={{ display: "flex", gap: 8, padding: 10, borderBottom: "1px solid #eee" }}>
-        <h2 style={{ margin: 0, flex: 1 }}>Oh, the places you've been!</h2>
+    <div className="page">
+      <header className="header">
+        <h2>Oh, the places you've been!</h2>
         {mode === "collect" ? (
           <button onClick={() => setMode("done")}>Done</button>
         ) : (
@@ -50,14 +50,12 @@ export default function App() {
         )}
       </header>
 
-      <div style={{ padding: 10 }}>
-        <MapContainer center={DEFAULT_CENTER} zoom={4} style={{ height: "70vh", borderRadius: 12 }}>
+      <div className="main">
+        <MapContainer center={DEFAULT_CENTER} zoom={4} className="map">
           <TileLayer
-            // OpenStreetMap tiles (this area pulls the api)
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-
           {mode === "collect" && <ClickToAdd onAdd={handleAdd} />}
 
           {places.map((p) => (
@@ -71,8 +69,8 @@ export default function App() {
         </MapContainer>
 
         {mode === "collect" && (
-          <div style={{ marginTop: 10 }}>
-            <h3 style={{ margin: "12px 0" }}>Places</h3>
+          <div className="places">
+            <h3>Places</h3>
             {places.length === 0 ? (
               <em>Click the map to add your first place.</em>
             ) : (
@@ -87,6 +85,10 @@ export default function App() {
           </div>
         )}
       </div>
+
+      <footer className="footer">
+        Map data © OpenStreetMap contributors • Built with Leaflet
+      </footer>
     </div>
   );
 }
