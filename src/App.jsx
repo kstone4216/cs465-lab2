@@ -16,8 +16,8 @@ function ClickToAdd({ onAdd }) {
     click(e) {
       const { lat, lng } = e.latlng;
       const title = window.prompt("Title for this location (e.g., 'Home' or 'Trip to Paris'):", "");
-      if (title === null) return; // cancel
-      const notes = window.prompt("Add details (years lived, fav spot, etc.):", "") ?? "";
+      if (title === null) return; // cancel if no title is entered 
+      const notes = window.prompt("Add details (years lived, fav spot, etc.):", "") ?? ""; //
       onAdd({ lat, lng, title: title.trim() || "Untitled", notes: notes.trim() });
     },
   });
@@ -26,12 +26,13 @@ function ClickToAdd({ onAdd }) {
 
 export default function App() {
   const [places, setPlaces] = useState([]); // {id, lat, lng, title, notes}
-  const [mode, setMode] = useState("collect"); // "collect" | "done"
+  const [mode, setMode] = useState("collect"); 
 
+// handles adding a location 
   const handleAdd = ({ lat, lng, title, notes }) => {
     setPlaces((prev) => [...prev, { id: crypto.randomUUID(), lat, lng, title, notes }]);
   };
-
+// Reset button 
   const handleReset = () => {
     if (!confirm("Clear everything and start over?")) return;
     setPlaces([]);
@@ -52,7 +53,7 @@ export default function App() {
       <div style={{ padding: 10 }}>
         <MapContainer center={DEFAULT_CENTER} zoom={4} style={{ height: "70vh", borderRadius: 12 }}>
           <TileLayer
-            // OpenStreetMap tiles (free, no key)
+            // OpenStreetMap tiles (this area pulls the api)
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
@@ -86,10 +87,6 @@ export default function App() {
           </div>
         )}
       </div>
-
-      <footer style={{ marginTop: "auto", padding: 10, textAlign: "center", color: "#666" }}>
-        Map data © OpenStreetMap contributors • Built with Leaflet
-      </footer>
     </div>
   );
 }
