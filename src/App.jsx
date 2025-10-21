@@ -51,7 +51,7 @@ export default function App() {
       </header>
 
       <div className="main"> 
-        <MapContainer center={DEFAULT_CENTER} zoom={4} className="map">  
+        <MapContainer center={DEFAULT_CENTER} zoom={4} className="map"> 
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' 
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -62,19 +62,19 @@ export default function App() {
             <Marker key={p.id} position={[p.lat, p.lng]}>
               <Popup>
                 <strong>{p.title}</strong>
-                {p.notes ? <p style={{ marginTop: 8 }}>{p.notes}</p> : null}
+                {p.notes ? <p style={{ marginTop: 8 }}>{p.notes}</p> : null} 
               </Popup>
             </Marker>
           ))}
         </MapContainer> 
 
-        {mode === "collect" && (
+        {mode === "collect" && (   //Collect mode 
           <div className="places"> 
             <h3>Places</h3>
-            {places.length === 0 ? ( 
+            {places.length === 0 ? (  // Shows when no places have been entered 
               <em>Click the map to add your first place.</em>
             ) : (
-              <ul>
+              <ul> 
                 {places.map((p) => (
                   <li key={p.id}>
                     <strong>{p.title}</strong> — {p.notes || "No details"}
